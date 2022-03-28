@@ -1,0 +1,25 @@
+---
+- name: Create user
+  become: true
+  ansible.builtin.user:
+    name: "{{ user }}"
+    comment: "Created by ansible"
+    create_home: true
+    home: "/home/{{ user }}"
+    shell: /bin/bash
+    generate_ssh_key: "{{ generate_ssh_key }}"
+
+- name: Modify home directory permissions
+  become: true
+  ansible.builtin.file:
+    path: "/home/{{ user }}"
+    state: directory
+    mode: "770"
+
+- name: Fetch generated public key
+  become: true
+  ansible.builtin.fetch:
+    src: "/home/{{ user }}/.ssh/id_rsa.pub"
+    dest: "./keys/{{ inventory_hostname }}/{{ user }}.pub"
+    flat: true
+  when: generate_ssh_key is undefined or (generate_ssh_key is defined and generate_ssh_key == false)

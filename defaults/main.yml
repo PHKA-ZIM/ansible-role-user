@@ -1,0 +1,3 @@
+---
+user: ansible
+generate_ssh_key: true
