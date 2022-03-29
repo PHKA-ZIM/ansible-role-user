@@ -7,7 +7,7 @@
     create_home: true
     home: "/home/{{ user }}"
     shell: /bin/bash
-    generate_ssh_key: "{{ generate_ssh_key }}"
+    generate_ssh_key: "{{ generate_ssh_key | bool }}"
 
 - name: Modify home directory permissions
   become: true
@@ -17,9 +17,9 @@
     mode: "770"
 
 - name: Fetch generated public key
+  when: generate_ssh_key == true
   become: true
   ansible.builtin.fetch:
     src: "/home/{{ user }}/.ssh/id_rsa.pub"
     dest: "./keys/{{ inventory_hostname }}/{{ user }}.pub"
     flat: true
-  when: generate_ssh_key is undefined or (generate_ssh_key is defined and generate_ssh_key == false)
