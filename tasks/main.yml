@@ -14,7 +14,7 @@
   ansible.builtin.file:
     path: "/home/{{ user_username }}"
     state: directory
-    mode: "770"
+    mode: "750"
 
 - name: Fetch generated public key
   when: user_generate_ssh_key == true
