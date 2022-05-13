@@ -12,7 +12,7 @@
 - name: Modify home directory permissions
   become: true
   ansible.builtin.file:
-    path: "/home/{{ user_username }}"
+    path: "/home/{{ user_username }}/"
     state: directory
     mode: "750"
 
