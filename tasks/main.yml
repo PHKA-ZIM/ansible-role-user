@@ -4,12 +4,13 @@
   ansible.builtin.user:
     name: "{{ user_username }}"
     comment: "Created by ansible"
-    create_home: true
+    create_home: "{{ user_create_home | bool }}"
     home: "/home/{{ user_username }}"
     shell: /bin/bash
-    generate_ssh_key: "{{ user_generate_ssh_key | bool }}"
+    generate_ssh_key: "{{ user_create_home | bool and user_generate_ssh_key | bool }}"
 
 - name: Modify home directory permissions
+  when: user_create_home
   become: true
   ansible.builtin.file:
     path: "/home/{{ user_username }}/"
@@ -17,7 +18,7 @@
     mode: "750"
 
 - name: Fetch generated public key
-  when: user_generate_ssh_key == true
+  when: user_create_home | bool and user_generate_ssh_key | bool
   become: true
   ansible.builtin.fetch:
     src: "/home/{{ user_username }}/.ssh/id_rsa.pub"
