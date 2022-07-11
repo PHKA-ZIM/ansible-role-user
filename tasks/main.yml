@@ -18,7 +18,10 @@
     mode: 0750
 
 - name: Fetch generated public key
-  when: user_create_home | bool and user_generate_ssh_key | bool
+  when:
+    - user_create_home | bool
+    - user_generate_ssh_key | bool
+    - user_fetch_ssh_key | bool
   become: true
   ansible.builtin.fetch:
     src: "/home/{{ user_username }}/.ssh/id_rsa.pub"
