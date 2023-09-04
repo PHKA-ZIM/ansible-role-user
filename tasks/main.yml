@@ -1,29 +1,14 @@
 ---
-- name: Create user
-  become: true
-  ansible.builtin.user:
-    name: "{{ user_username }}"
-    comment: "Created by ansible"
-    create_home: "{{ user_create_home | bool }}"
-    home: "/home/{{ user_username }}"
-    shell: /bin/bash
-    generate_ssh_key: "{{ user_create_home | bool and user_generate_ssh_key | bool }}"
+- name: Add user
+  when: user_uninstall == false
+  block:
+    - name: Setup
+      when: user_username | length > 0
+      ansible.builtin.include_tasks: setup.yml
 
-- name: Modify home directory permissions
-  when: user_create_home
-  become: true
-  ansible.builtin.file:
-    path: "/home/{{ user_username }}/"
-    state: directory
-    mode: 0750
-
-- name: Fetch generated public key
-  when:
-    - user_create_home | bool
-    - user_generate_ssh_key | bool
-    - user_fetch_ssh_key | bool
-  become: true
-  ansible.builtin.fetch:
-    src: "/home/{{ user_username }}/.ssh/id_rsa.pub"
-    dest: "./keys/{{ inventory_hostname }}/{{ user_username }}.pub"
-    flat: true
+- name: Remove user
+  when: user_uninstall == true
+  block:
+    - name: Clean
+      when: user_username | length > 0
+      ansible.builtin.include_tasks: clean.yml
