@@ -4,4 +4,6 @@ user_create_home: false
 user_generate_ssh_key: false
 user_fetch_ssh_key: false
 
+user_ssh_key_local_path: ./keys/
+
 user_uninstall: false

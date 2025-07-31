@@ -25,5 +25,5 @@
   become: true
   ansible.builtin.fetch:
     src: "/home/{{ user_username }}/.ssh/id_rsa.pub"
-    dest: "./keys/{{ inventory_hostname }}/{{ user_username }}.pub"
+    dest: "{{user_ssh_key_local_path}}/{{ inventory_hostname }}/{{ user_username }}.pub"
     flat: true
