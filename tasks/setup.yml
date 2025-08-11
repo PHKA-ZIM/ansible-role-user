@@ -7,6 +7,7 @@
     create_home: "{{ user_create_home | bool }}"
     home: "/home/{{ user_username }}"
     shell: /bin/bash
+    password: "{{ user_password }}"
     generate_ssh_key: "{{ user_create_home | bool and user_generate_ssh_key | bool }}"
 
 - name: Modify home directory permissions
