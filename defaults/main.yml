@@ -1,6 +1,7 @@
 ---
 user_username: ansible
 user_password: "!"
+user_update_password: "on_create"
 user_create_home: false
 user_generate_ssh_key: false
 user_fetch_ssh_key: false
